@@ -142,8 +142,8 @@ void Placer_C::run(){
             if(_vCell.size() < 100)
                 place_succ = shrunk2d_ntuplace();
             else
-                place_succ = shrunk2d_replace();    
-            // place_succ = shrunk2d_replace();
+                // place_succ = shrunk2d_replace();  
+                place_succ = shrunk2d_ntuplace();
 
             //place_succ = true3d_placement(); // our main function
             //place_succ = half3d_placement(); // our main function
@@ -218,6 +218,8 @@ bool Placer_C::shrunked_2d_ntuplace(string para){
         string aux_dir = _RUNDIR + caseName + "/";
         string cmd = "mkdir -p " + aux_dir;
         system(cmd.c_str());
+        string chmod = "chmod +777 " + aux_dir + "*";
+        system(chmod.c_str());
         aux2D = AUX(aux_dir, caseName);
         // for shrunk 2d
         int rowH = ceil((_pChip->get_die(0)->get_row_height() + _pChip->get_die(1)->get_row_height())/4.0);
@@ -926,7 +928,6 @@ bool Placer_C::shrunk2d_replace(){
         // check nets
         aux.remove_open_net();
         aux.write_files();
-        // run_replace("ball");
         run_ntuplace3("ball");
         // placer_succ = read_pl_and_set_pos_for_ball(_RUNDIR + "/outputs/IBM/" + "ball" + "/experiment0/tiers/0/" + "ball.pl");
         placer_succ = read_pl_and_set_pos_for_ball(_RUNDIR+"ball.ntup.pl");
@@ -2106,7 +2107,6 @@ bool Placer_C::ntu_d2dplace(){
         aux0.remove_open_net();
         aux0.write_files();
         run_ntuplace3("die0");
-        //run_ntuplace4("die0");
         read_pl_and_set_pos(_RUNDIR+"die0.ntup.pl", 0);
     }
     // run ntuplace for die1
@@ -2119,7 +2119,6 @@ bool Placer_C::ntu_d2dplace(){
         aux1.remove_open_net();
         aux1.write_files();
         run_ntuplace3("die1");
-        //run_ntuplace4("die1");
         read_pl_and_set_pos(_RUNDIR+"die1.ntup.pl", 1);
     }
     // run ntuplace for terminal
@@ -3148,14 +3147,31 @@ bool Placer_C::read_pl_and_set_pos_for_ball(string fileName){
 void Placer_C::run_ntuplace3(string caseName){
     run_ntuplace3(caseName, "");
 }
+// void Placer_C::run_ntuplace3(string caseName, string otherPara){
+//     cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'...\n";
+//     system(("rm -rf "+_RUNDIR+caseName+".ntup.pl").c_str());
+//     // ex: ./bin/ntuplace-r -aux ./run_tmp/die0/die0.aux -out ./run_tmp/die0 > ./run_tmp/die0-ntuplace.log
+//     string cmd = "./bin/ntuplace-r -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " " + otherPara + " > " + _RUNDIR + caseName + "-ntuplace.log";
+//     system(cmd.c_str());
+//     cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
+// }
+
 void Placer_C::run_ntuplace3(string caseName, string otherPara){
-    cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'...\n";
-    system(("rm -rf "+_RUNDIR+caseName+".ntup.pl").c_str());
+    cout << BLUE << "[Placer]" << RESET << " - Running dreamplace for \'" << caseName << "\'...\n";
+    // system(("rm -rf "+_RUNDIR+caseName+".ntup.pl").c_str());
     // ex: ./bin/ntuplace-r -aux ./run_tmp/die0/die0.aux -out ./run_tmp/die0 > ./run_tmp/die0-ntuplace.log
-    string cmd = "./bin/ntuplace-r -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " " + otherPara + " > " + _RUNDIR + caseName + "-ntuplace.log";
-    system(cmd.c_str());
-    cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
+    // string cmd = "./bin/ntuplace-r -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " " + otherPara + " > " + _RUNDIR + caseName + "-dreamplace.log";
+
+    string dd = "/3D-placer/thirdparty/3d-placer/";
+    string aux_input = R"('2c \"aux_input\" : \")" + dd + _RUNDIR + caseName + "/" + caseName + ".aux"  + R"(\",')";
+    string json_path = " /3D-placer/thirdparty/DREAMPlace/install/test/ispd2005/adaptec1.json";
+    string update_cmd = "sudo sed -i " + aux_input + json_path;
+    string place_cmd = "/home/placer/miniconda3/envs/placer/bin/python /3D-placer/thirdparty/DREAMPlace/install/dreamplace/Placer.py /3D-placer/thirdparty/DREAMPlace/install/test/ispd2005/adaptec1.json";
+    system(update_cmd.c_str());
+    system(place_cmd.c_str());
+    cout << BLUE << "[Placer]" << RESET << " - Running dreamplace for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
 }
+
 void Placer_C::run_replace(string caseName, bool use_pReplace){
     string cmd = "cd " + _RUNDIR + "; ../../bin/RePlAce-static -onlyGP " + _rPara +" -bmflag ibm -bmname " + caseName + " > " + caseName + "-replace.log" + "; cd ../..";
     if(use_pReplace){
@@ -3168,19 +3184,13 @@ void Placer_C::run_replace(string caseName, bool use_pReplace){
         cout << "replace-cmd: " << cmd << "\n";
     system(cmd.c_str());
     if(use_pReplace){
-        system(("rm -rf " + _RUNDIR + "outputs/IBM; " + "mv " + _RUNDIR + "outputs/ibm " + _RUNDIR + "outputs/IBM").c_str());
+        // system(("rm -rf " + _RUNDIR + "outputs/IBM; " + "mv " + _RUNDIR + "outputs/ibm " + _RUNDIR + "outputs/IBM").c_str());
         cout << BLUE << "[Placer]" << RESET << " - Running pReplace for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
     } else {
         cout << BLUE << "[Placer]" << RESET << " - Running replace for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
     }
 }
-void Placer_C::run_ntuplace4(string caseName){
-    cout << BLUE << "[Placer]" << RESET << " - Running ntuplace4 for \'" << caseName << "\'...\n";
-    // ex: ./bin/ntuplace-r -aux ./run_tmp/die0/die0.aux -out ./run_tmp/die0 > ./run_tmp/die0-ntuplace.log
-    string cmd = "./bin/ntuplace4 -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " -noCong -noCongLG -noPGAvoid > " + _RUNDIR + caseName + "-ntuplace.log";
-    system(cmd.c_str());
-    cout << BLUE << "[Placer]" << RESET << " - Running ntuplace4 for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
-}
+
 void Placer_C::run_hmetis(int k, double ufactor, string caseName){
     cout << BLUE << "[Placer]" << RESET << " - Running hmetis for \'" << caseName << "\'...\n";
     string fileName = _RUNDIR + caseName + ".hgr";
@@ -3226,6 +3236,7 @@ void Placer_C::create_aux_form_for_ball(AUX &aux, string caseName){  // output i
     vector<Net_C*>& v_nets = _pDesign->get_nets();
     for(Net_C* net : v_nets){
         if(!net->is_cross_net()) continue;
+        aux.add_net(net->get_name());
         int ball_x = net->get_ball_pos().x - _pChip->get_ball_width()/2 - int(_pChip->get_ball_spacing()/2.0+0.5);
         int ball_y = net->get_ball_pos().y - _pChip->get_ball_height()/2 - int(_pChip->get_ball_spacing()/2.0+0.5);
         aux.add_node(net->get_name(), ball_w, ball_h, ball_x, ball_y, 0);
