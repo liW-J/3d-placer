@@ -142,8 +142,8 @@ void Placer_C::run(){
             if(_vCell.size() < 100)
                 place_succ = shrunk2d_ntuplace();
             else
-                // place_succ = shrunk2d_replace();  
-                place_succ = shrunk2d_ntuplace();
+                place_succ = shrunk2d_replace();  
+                // place_succ = shrunk2d_ntuplace();
 
             //place_succ = true3d_placement(); // our main function
             //place_succ = half3d_placement(); // our main function
@@ -3147,30 +3147,31 @@ bool Placer_C::read_pl_and_set_pos_for_ball(string fileName){
 void Placer_C::run_ntuplace3(string caseName){
     run_ntuplace3(caseName, "");
 }
-// void Placer_C::run_ntuplace3(string caseName, string otherPara){
-//     cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'...\n";
-//     system(("rm -rf "+_RUNDIR+caseName+".ntup.pl").c_str());
-//     // ex: ./bin/ntuplace-r -aux ./run_tmp/die0/die0.aux -out ./run_tmp/die0 > ./run_tmp/die0-ntuplace.log
-//     string cmd = "./bin/ntuplace-r -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " " + otherPara + " > " + _RUNDIR + caseName + "-ntuplace.log";
-//     system(cmd.c_str());
-//     cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
-// }
 
 void Placer_C::run_ntuplace3(string caseName, string otherPara){
-    cout << BLUE << "[Placer]" << RESET << " - Running dreamplace for \'" << caseName << "\'...\n";
-    // system(("rm -rf "+_RUNDIR+caseName+".ntup.pl").c_str());
+    cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'...\n";
+    system(("rm -rf "+_RUNDIR+caseName+".ntup.pl").c_str());
     // ex: ./bin/ntuplace-r -aux ./run_tmp/die0/die0.aux -out ./run_tmp/die0 > ./run_tmp/die0-ntuplace.log
-    // string cmd = "./bin/ntuplace-r -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " " + otherPara + " > " + _RUNDIR + caseName + "-dreamplace.log";
-
-    string dd = "/3D-placer/thirdparty/3d-placer/";
-    string aux_input = R"('2c \"aux_input\" : \")" + dd + _RUNDIR + caseName + "/" + caseName + ".aux"  + R"(\",')";
-    string json_path = " /3D-placer/thirdparty/DREAMPlace/install/test/ispd2005/adaptec1.json";
-    string update_cmd = "sudo sed -i " + aux_input + json_path;
-    string place_cmd = "/home/placer/miniconda3/envs/placer/bin/python /3D-placer/thirdparty/DREAMPlace/install/dreamplace/Placer.py /3D-placer/thirdparty/DREAMPlace/install/test/ispd2005/adaptec1.json";
-    system(update_cmd.c_str());
-    system(place_cmd.c_str());
-    cout << BLUE << "[Placer]" << RESET << " - Running dreamplace for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
+    string cmd = "./bin/ntuplace-r -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " " + otherPara + " > " + _RUNDIR + caseName + "-ntuplace.log";
+    system(cmd.c_str());
+    cout << BLUE << "[Placer]" << RESET << " - Running ntuplace3 for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
 }
+
+// void Placer_C::run_ntuplace3(string caseName, string otherPara){
+//     cout << BLUE << "[Placer]" << RESET << " - Running dreamplace for \'" << caseName << "\'...\n";
+//     // system(("rm -rf "+_RUNDIR+caseName+".ntup.pl").c_str());
+//     // ex: ./bin/ntuplace-r -aux ./run_tmp/die0/die0.aux -out ./run_tmp/die0 > ./run_tmp/die0-ntuplace.log
+//     // string cmd = "./bin/ntuplace-r -aux " + _RUNDIR + caseName + "/" + caseName + ".aux -out " + _RUNDIR + caseName + " " + otherPara + " > " + _RUNDIR + caseName + "-dreamplace.log";
+
+//     string dd = "/3D-placer/thirdparty/3d-placer/";
+//     string aux_input = R"('2c \"aux_input\" : \")" + dd + _RUNDIR + caseName + "/" + caseName + ".aux"  + R"(\",')";
+//     string json_path = " /3D-placer/thirdparty/DREAMPlace/install/test/ispd2005/adaptec1.json";
+//     string update_cmd = "sudo sed -i " + aux_input + json_path;
+//     string place_cmd = "/home/placer/miniconda3/envs/placer/bin/python /3D-placer/thirdparty/DREAMPlace/install/dreamplace/Placer.py /3D-placer/thirdparty/DREAMPlace/install/test/ispd2005/adaptec1.json";
+//     system(update_cmd.c_str());
+//     system(place_cmd.c_str());
+//     cout << BLUE << "[Placer]" << RESET << " - Running dreamplace for \'" << caseName << "\'" << GREEN << " completed!\n" << RESET;
+// }
 
 void Placer_C::run_replace(string caseName, bool use_pReplace){
     string cmd = "cd " + _RUNDIR + "; ../../bin/RePlAce-static -onlyGP " + _rPara +" -bmflag ibm -bmname " + caseName + " > " + caseName + "-replace.log" + "; cd ../..";
