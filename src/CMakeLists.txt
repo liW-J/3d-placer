@@ -36,7 +36,7 @@ target_link_libraries(3d_placer_lib PUBLIC
 )
 
 # install headers
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION src/ops/include
-    FILES_MATCHING PATTERN "*.h"
-)
+# install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#     DESTINATION src/ops/include
+#     FILES_MATCHING PATTERN "*.h"
+# )
