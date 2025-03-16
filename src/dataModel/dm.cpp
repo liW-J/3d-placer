@@ -117,6 +117,15 @@ void DmMgr_C::run(){
     cout << BLUE << "[DM]" << RESET << " - Finish!\n";
 }
 
+void DmMgr_C::txt2bookself(){
+    cout << BLUE << "[DM]" << RESET << " - Start\n";
+    // init place
+    _pPlacer = new Placer_C(_pChip, _pDesign, _paramHdl, _tStart);
+    _pPlacer->txt2bookself();
+
+    cout << BLUE << "[DM]" << RESET << " - Finish!\n";
+}
+
 void DmMgr_C::print_result(){
     vector<long long> vHPWL(2,0);
     long long totalHPWL = 0;

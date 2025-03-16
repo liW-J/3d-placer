@@ -1,3 +1,11 @@
+/*
+ * @Author: JeanneWillis hi@jeannewillis.cn
+ * @Date: 2025-02-28 13:56:38
+ * @LastEditors: JeanneWillis hi@jeannewillis.cn
+ * @LastEditTime: 2025-03-16 22:56:22
+ * @FilePath: /D2D-placer/thirdparty/3d-placer/src/dataModel/dm.h
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #ifndef DM_H
 #define DM_H
 #include <ctime>
@@ -42,6 +50,7 @@ public:
     DmMgr_C(Parser_C&, ParamHdl_C&, clock_t);
     void init();
     void run();
+    void txt2bookself();
     void print_info();
     void dump_info();
     void output_aux_form(int dieId); // output in dir "./aux/<case-name>/"

@@ -131,6 +131,9 @@ public:
     void get_para(bool test);
 
     void output_result(string);
+
+    // txt2bookself
+    bool txt2bookself();
 };
 
 #endif

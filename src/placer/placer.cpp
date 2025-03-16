@@ -141,6 +141,7 @@ void Placer_C::run(){
             //place_succ = pin3d_ntuplace();
             if(_vCell.size() < 100)
                 place_succ = shrunk2d_ntuplace();
+                // place_succ = shrunked_2d_ntuplace();
             else
                 place_succ = shrunk2d_replace();  
                 // place_succ = shrunk2d_ntuplace();
@@ -3875,4 +3876,53 @@ void Placer_C::output_result(string fileName){
         fout << "Terminal " << net->get_name() << " " << net->get_ball_pos().x << " " << net->get_ball_pos().y << "\n";
     }
     fout.close();
+}
+
+bool Placer_C::txt2bookself(){
+    for(Cell_C* cell : _vCell)
+        cell->set_die(_pChip->get_die(0));
+    rand_place(0);
+    // run ntuplace with half cell height
+    AUX aux2D;
+    string caseName = "flattened-2d";
+    // >>> create_aux_form();
+    bool placer_succ;
+    {
+        string aux_dir = _RUNDIR + caseName + "/";
+        string cmd = "mkdir -p " + aux_dir;
+        system(cmd.c_str());
+        aux2D = AUX(aux_dir, caseName);
+        // for shrunk 2d
+        int rowH = ceil((_pChip->get_die(0)->get_row_height() + _pChip->get_die(1)->get_row_height())/4.0);
+        // nodes
+        vector<Cell_C*>& v_cells = _vCell;
+        for(Cell_C* cell : v_cells){
+            int techId0 = _pChip->get_die(0)->get_techId();
+            int techId1 = _pChip->get_die(1)->get_techId();
+            int cellW = ceil((cell->get_width(techId0)+cell->get_width(techId1))/2.0);
+            aux2D.add_node(cell->get_name(), cellW, rowH, cell->get_posX(), cell->get_posY(),0);
+            for(int i=0;i<cell->get_pin_num();++i){
+                Pin_C* pin = cell->get_pin(i);
+                Net_C* net = pin->get_net();
+                if(net != nullptr){
+                    char IO = 'I';
+                    if(!aux2D.check_net_exist(net->get_name())){
+                        aux2D.add_net(net->get_name());
+                        IO='O';
+                    }
+                    Pos pin_offset0 = cell->get_master_cell()->get_pin_offset(_pChip->get_die(0)->get_techId() ,pin->get_id());
+                    //pin_offset0.x -= cell->get_width()/2; pin_offset0.y -= cell->get_height()/2;
+                    Pos pin_offset1 = cell->get_master_cell()->get_pin_offset(_pChip->get_die(1)->get_techId() ,pin->get_id());
+                    //pin_offset1.x -= cell->get_width()/2; pin_offset1.y -= cell->get_height()/2;
+                    Pos pin_offset = Pos(ceil((pin_offset0.x+pin_offset1.x)/2.0),ceil((pin_offset0.y+pin_offset1.y)/4.0));
+                    aux2D.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset.x, pin_offset.y);
+                }
+            }
+        }
+        // rows
+        aux2D.set_default_rows(_pChip->get_width(), rowH, _pChip->get_height()/rowH);
+    }// <<< create_aux_form();
+
+    aux2D.write_files();
+    return true;
 }
