@@ -3893,7 +3893,7 @@ bool Placer_C::txt2bookself(){
         system(cmd.c_str());
         aux2D = AUX(aux_dir, caseName);
         // for shrunk 2d
-        int rowH = ceil((_pChip->get_die(0)->get_row_height() + _pChip->get_die(1)->get_row_height())/4.0);
+        int rowH = ceil((_pChip->get_die(0)->get_row_height() + _pChip->get_die(1)->get_row_height())/2.0);
         // nodes
         vector<Cell_C*>& v_cells = _vCell;
         for(Cell_C* cell : v_cells){
