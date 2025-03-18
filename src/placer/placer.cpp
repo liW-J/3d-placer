@@ -3920,7 +3920,7 @@ bool Placer_C::txt2bookself(){
             }
         }
         // rows
-        aux2D.set_default_rows(_pChip->get_width(), rowH, _pChip->get_height()/rowH);
+        aux2D.set_default_rows(_pChip->get_width()*2, rowH, _pChip->get_height()/rowH*2);
     }// <<< create_aux_form();
 
     aux2D.write_files();
