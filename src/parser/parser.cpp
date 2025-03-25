@@ -91,7 +91,27 @@ bool Parser_C::read_file(string fileName){
                     stringstream ss3(line);
                     // add libCell
                     ParserLibCell libCell;
-                    ss3 >> label >> libCell.name >> libCell.sizeX >> libCell.sizeY >> libCell.numLibPin;
+                    // ss3 >> label >> libCell.name >> libCell.sizeX >> libCell.sizeY >> libCell.numLibPin;
+                    ss3 >> label;
+
+                    string next_token;
+                    ss3 >> next_token;
+                    if(next_token == "N" || next_token == "Y"){ // ICCAD2023 format
+                        ss3 >> libCell.name >> libCell.sizeX >> libCell.sizeY >> libCell.numLibPin;
+                        
+                        if(next_token == "Y"){
+                            libCell.isMacro = 1;
+                        }
+                        else{
+                            libCell.isMacro = 0;
+                        }
+                    }
+                    else{ // ICCAD2022 format
+                        libCell.name = next_token;
+                        ss3 >> libCell.sizeX >> libCell.sizeY >> libCell.numLibPin;
+                        libCell.isMacro = 0;
+                    }
+                    
                     int countLibPin = 0;
                     while(countLibPin < libCell.numLibPin){ // get libCells
                         getline(file, line);

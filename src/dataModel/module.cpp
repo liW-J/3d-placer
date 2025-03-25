@@ -15,6 +15,15 @@ CellLib_C::CellLib_C(string name, int pin_num, int tech_num){
     _vTechLibPinOffset.resize(tech_num, vector<Pos>(pin_num));
     _vPinName.clear();
 }
+CellLib_C::CellLib_C(string name, int pin_num, int tech_num, int isMacro){
+    _name = name;
+    _numTech = tech_num;
+    _isMacro = isMacro;
+    _techW.resize(tech_num, 0);
+    _techH.resize(tech_num, 0);
+    _vTechLibPinOffset.resize(tech_num, vector<Pos>(pin_num));
+    _vPinName.clear();
+}
 void CellLib_C::add_pin(int tech_id, string pinName, Pos offset){
     assert(tech_id < _vTechLibPinOffset.size());
     // find the id for the pin. If not exist than push_back(pinName). Then set pin_offset.
@@ -60,6 +69,9 @@ int CellLib_C::get_cell_height(int techId){
 }
 Pos CellLib_C::get_pin_offset(int techId,int pinId){
     return _vTechLibPinOffset[techId][pinId];
+}
+int CellLib_C::get_isMacro(){
+    return _isMacro;
 }
 //-----------------------------------------------------------------------------------------------------//
 Row_C::Row_C(){}
@@ -283,6 +295,7 @@ Cell_C::Cell_C(){}
 Cell_C::Cell_C(string name, CellLib_C* masterCell){
     _name = name;
     _masterCell = masterCell;
+    // _isMacro = masterCell->get_isMacro();
     for(int i=0;i<masterCell->get_pin_num();++i){
         Pin_C* pin = new Pin_C(i,this);
         _vPins.emplace_back(pin);
@@ -353,6 +366,9 @@ int Cell_C::get_height(int techId){
 }
 int Cell_C::get_pin_num(){
     return _vPins.size();
+}
+int Cell_C::get_isMacro(){
+    return _masterCell->get_isMacro();
 }
 Pin_C* Cell_C::get_pin(int pinId){
     return _vPins[pinId];

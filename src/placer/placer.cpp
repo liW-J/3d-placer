@@ -3900,7 +3900,8 @@ bool Placer_C::txt2bookself(){
             int techId0 = _pChip->get_die(0)->get_techId();
             int techId1 = _pChip->get_die(1)->get_techId();
             int cellW = ceil((cell->get_width(techId0)+cell->get_width(techId1))/2.0);
-            aux2D.add_node(cell->get_name(), cellW, rowH, cell->get_posX(), cell->get_posY(),0);
+            int cellH = ceil((cell->get_height(techId0)+cell->get_height(techId1))/2.0);
+            aux2D.add_node(cell->get_name(), cellW, cellH, cell->get_posX(), cell->get_posY(), cell->get_isMacro());
             for(int i=0;i<cell->get_pin_num();++i){
                 Pin_C* pin = cell->get_pin(i);
                 Net_C* net = pin->get_net();

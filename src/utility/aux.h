@@ -69,6 +69,7 @@ public:
     void write_wts();
 
     void add_node(string, int, int, int, int, int); // name, width, height, x, y, type(0=movable, 1=terminal, 2=terminal_NI)
+    void add_node(string, int, int, int, int, int, int); // name, width, height, x, y, type(0=movable, 1=terminal, 2=terminal_NI), isMacro
     void add_net(string); // name, degree
     void add_pin(string, string, char, int, int); // netName, cellName, I/O, x_offest, y_offset
     void add_pin(string, string, char, float, float); // netName, cellName, I/O, x_offest, y_offset

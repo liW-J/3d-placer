@@ -63,9 +63,11 @@ class CellLib_C{
     vector< vector<Pos> > _vTechLibPinOffset; // pin_offset XY in each tech
     unordered_map<string, int> _mPinName2Idx;
     vector<string> _vPinName;
+    int _isMacro;
 public:
     CellLib_C();
     CellLib_C(string, int, int); // name, pin_num, tech_num
+    CellLib_C(string, int, int, int); // name, pin_num, tech_num, isMacro  
     void add_pin(int, string, Pos); // tech_id, Pos(offsetX, offsetY)
     void add_pin(int, string, int, int); // tech_id, offsetX, offsetY
     void set_size(int, int, int); // tech_id, sizeX, sizeY
@@ -77,6 +79,7 @@ public:
     int get_cell_width(int); // get_cell_width with techId
     int get_cell_height(int); // get_cell_height with techId
     Pos get_pin_offset(int,int); // get pin offset with techId and pinId
+    int get_isMacro();
 };
 
 class Row_C{
@@ -175,7 +178,7 @@ class Cell_C{
     Die_C* _die;
     Row_C* _row;
     int _degree;
-
+    // int _isMacro;
     vector<double> _vGnnFeatures; // size=9: [z, x, y, cellDegree, avgNetDegree, pullForce_x, pullForce_y, pushForce_x, pushForce_y]
 public:
     Cell_C();
@@ -204,6 +207,7 @@ public:
     CellLib_C* get_master_cell();
     int get_die_techId();
     int get_dieId();
+    int get_isMacro();
 
     bool check_drc(); // check if the position is satisfied for the constraints. (no overlap with rows and in die)
 

@@ -22,7 +22,7 @@ DmMgr_C::DmMgr_C(Parser_C& parser, ParamHdl_C& paramHdl, clock_t tStart){
         for(int i=0;i<v_libcell.size();++i){
             CellLib_C* cellLib;
             if(tech_id==0){ // init the CellLib list with the first tech
-                cellLib = new CellLib_C(v_libcell[i].name, v_libcell[i].numLibPin , v_tech.size());
+                cellLib = new CellLib_C(v_libcell[i].name, v_libcell[i].numLibPin , v_tech.size(), v_libcell[i].isMacro);
                 _mCellLib.emplace(v_libcell[i].name, cellLib); // id, cellLib
                 _vCellLib.emplace_back(cellLib);
             }

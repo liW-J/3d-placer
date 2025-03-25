@@ -58,6 +58,7 @@ struct ParserLibCell{
     int sizeY;
     int numLibPin;
     vector<ParserLibPin> v_libPin;
+    int isMacro;
 };
 
 struct ParserTech{

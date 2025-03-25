@@ -123,8 +123,8 @@ void AUX::write_pl(){
     fout << "\n";
     for(AuxNode& node : _vNodes){
         fout << node.name << "\t" << node.x << "\t" << node.y << "\t: N";
-        if(node.type == 1) fout << " /FIXED";
-        if(node.type == 2) fout << " /FIXED_NI";
+        // if(node.type == 1) fout << " /FIXED";
+        // if(node.type == 2) fout << " /FIXED_NI";
         fout << "\n";
     }
     fout.close();
