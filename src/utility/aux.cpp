@@ -30,6 +30,12 @@ void AUX::set_dir_and_circuit_name(string dir, string name){
 bool AUX::check_net_exist(string netName){
     return (_mNets.find(netName) != _mNets.end());
 }
+bool AUX::check_node_exist(string nodeName){
+    for(AuxNode& node : _vNodes){
+        if(node.name == nodeName) return true;
+    }
+    return false;
+}
 void AUX::remove_open_net(){
     auto it = _mNets.begin();
     for(; it != _mNets.end(); ) {

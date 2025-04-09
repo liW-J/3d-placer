@@ -58,6 +58,7 @@ public:
     void set_circuit_name(string);
     void set_dir_and_circuit_name(string, string);
     bool check_net_exist(string);
+    bool check_node_exist(string);
     void remove_open_net();
 
     void write_files(); 
