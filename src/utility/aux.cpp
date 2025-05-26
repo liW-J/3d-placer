@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <algorithm> 
 
 
 AUX::AUX(){}
@@ -33,6 +34,12 @@ bool AUX::check_net_exist(string netName){
 bool AUX::check_node_exist(string nodeName){
     for(AuxNode& node : _vNodes){
         if(node.name == nodeName) return true;
+    }
+    return false;
+}
+bool AUX::check_pin_exist(string netName, string nodeName){
+    for(AuxPin& pin : _mNets[netName].vPins){
+        if(pin.cellName == nodeName) return true;
     }
     return false;
 }
@@ -129,8 +136,8 @@ void AUX::write_pl(){
     fout << "\n";
     for(AuxNode& node : _vNodes){
         fout << node.name << "\t" << node.x << "\t" << node.y << "\t: N";
-        // if(node.type == 1) fout << " /FIXED";
-        // if(node.type == 2) fout << " /FIXED_NI";
+        if(node.type == 1) fout << " /FIXED";
+        if(node.type == 2) fout << " /FIXED_NI";
         fout << "\n";
     }
     fout.close();
@@ -170,15 +177,24 @@ void AUX::add_node(string name, int w, int h, int x, int y, int type){
     if(type >= 1) ++numTerminals;
     _vNodes.emplace_back(node);
 }
+
+bool compareNodes(const AuxNode& a, const AuxNode& b) {
+    return a.name < b.name;
+}
+
+void AUX::sort_node(){
+    std::sort(_vNodes.begin(), _vNodes.end(), compareNodes);
+}
+
 void AUX::add_net(string name){
     AuxNet net;
     net.degree = 0;
     net.name = name;
     _mNets.emplace(name, net);
 }
-void AUX::add_pin(string netName, string cellName, char IO, int x_offset, int y_offset){
-    add_pin(netName, cellName, IO, float(x_offset), float(y_offset));
-}
+// void AUX::add_pin(string netName, string cellName, char IO, int x_offset, int y_offset){
+//     add_pin(netName, cellName, IO, float(x_offset), float(y_offset));
+// }
 void AUX::add_pin(string netName, string cellName, char IO, float x_offset, float y_offset){
     AuxPin pin;
     pin.cellName = cellName;
@@ -207,6 +223,7 @@ void AUX::set_default_rows(int w, int h, int n){
         add_row(coord, h, 1, 1, 0, 0, 0, w);
     }
 }
+
 bool AUX::read_pl(vector<AuxNode>& vPlacedNode){
     string fileName = _circuit_name + ".out.lg.pl";
     return read_pl(fileName, vPlacedNode);

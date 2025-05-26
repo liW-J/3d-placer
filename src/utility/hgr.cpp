@@ -55,19 +55,19 @@ void HGR::write_hgr(){
     ofstream fout(fileName);
     fout << _numNet << " " << _numNode << "\n";
     for(int i=0;i<_vNets.size();++i){
-        cout << "Net " << _vNets[i] << ": ";  
+        // cout << "Net " << _vNets[i] << ": ";  
         for(int j=0;j<_vNetNodes[i].size();++j){
             fout << _vNetNodes[i][j]+1 << " ";
-            cout << _vNetNodes[i][j]+1 << " ";  
+            // cout << _vNetNodes[i][j]+1 << " ";  
         }
         fout << "\n";
-        cout << endl; 
+        // cout << endl; 
     }   
-    for(int i=0;i<_vNodes.size();++i){
-        cout << "Node " << _vNodes[i] << ": ";  
-        cout << _mNodes[_vNodes[i]] + 1 << endl;
-        cout << endl;   
-    }
+    // for(int i=0;i<_vNodes.size();++i){
+    //     cout << "Node " << _vNodes[i] << ": ";  
+    //     cout << _mNodes[_vNodes[i]] + 1 << endl;
+    //     cout << endl;   
+    // }
     fout.close();
     cout << "HGR file written successfully." << endl;
 }

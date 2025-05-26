@@ -860,7 +860,6 @@ bool Placer_C::shrunk2d_ntuplace(){
 bool Placer_C::shrunk2d_replace(){
     double part_time_start=0, total_part_time=0;
     cout << BLUE << "[Placer]" << RESET << " - Start Pseudo3D Placement Flow (Shrunk2D-RePlAce).\n";
-    
     bool placer_succ;
     ////////////////////////////////////////////////////////////////
     // Init Placement (2D Placement)
@@ -895,6 +894,7 @@ bool Placer_C::shrunk2d_replace(){
     // }
     // cout << BLUE << "[Placer]" << RESET << " - Partition: runtime = " << total_part_time << " sec = " << total_part_time/60.0 << " min.\n";
     cout << BLUE << "[Placer]" << RESET << " - Partition result: " << "Die[0].cell_num = " << _pChip->get_die(0)->get_cells().size() << ", Die[1].cell_num = " << _pChip->get_die(1)->get_cells().size() << ".\n";
+    // mincut_k_partition();
     bin_based_partition_new();
 
     total_part_time = (float)clock() / CLOCKS_PER_SEC - part_time_start;
@@ -3915,7 +3915,7 @@ bool Placer_C::txt2bookself(){
                     //pin_offset0.x -= cell->get_width()/2; pin_offset0.y -= cell->get_height()/2;
                     Pos pin_offset1 = cell->get_master_cell()->get_pin_offset(_pChip->get_die(1)->get_techId() ,pin->get_id());
                     //pin_offset1.x -= cell->get_width()/2; pin_offset1.y -= cell->get_height()/2;
-                    Pos pin_offset = Pos(ceil((pin_offset0.x+pin_offset1.x)/2.0),ceil((pin_offset0.y+pin_offset1.y)/2.0));
+                    Pos pin_offset = Pos(ceil((pin_offset0.x+pin_offset1.x)/2.0), ceil((pin_offset0.y+pin_offset1.y)/2.0));
                     aux2D.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset.x, pin_offset.y);
                 }
             }
@@ -3951,6 +3951,7 @@ bool Placer_C::txt2bookself(){
                         IO='O';
                     }
                     Pos pin_offset0 = cell->get_master_cell()->get_pin_offset(_pChip->get_die(0)->get_techId() ,pin->get_id());
+                    // pin_offset0.x -= cell->get_width()/2; pin_offset0.y -= cell->get_height()/2;
                     auxTier0.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset0.x, pin_offset0.y);
                 }
             }       

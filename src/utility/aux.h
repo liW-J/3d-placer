@@ -24,10 +24,11 @@ struct AuxNet{
     string name;
     vector<AuxPin> vPins;
 };
+
 struct AuxNode{
     string name;
-    int width;
-    int height;
+    float width;
+    float height;
     int x;
     int y;
     int type; // (0=movable, 1=terminal, 2=terminal_NI)
@@ -59,8 +60,10 @@ public:
     void set_dir_and_circuit_name(string, string);
     bool check_net_exist(string);
     bool check_node_exist(string);
+    bool check_pin_exist(string, string);
     void remove_open_net();
-
+    void sort_node();
+    
     void write_files(); 
     void write_aux();
     void write_nets();
@@ -72,7 +75,7 @@ public:
     void add_node(string, int, int, int, int, int); // name, width, height, x, y, type(0=movable, 1=terminal, 2=terminal_NI)
     void add_node(string, int, int, int, int, int, int); // name, width, height, x, y, type(0=movable, 1=terminal, 2=terminal_NI), isMacro
     void add_net(string); // name, degree
-    void add_pin(string, string, char, int, int); // netName, cellName, I/O, x_offest, y_offset
+    // void add_pin(string, string, char, int, int); // netName, cellName, I/O, x_offest, y_offset
     void add_pin(string, string, char, float, float); // netName, cellName, I/O, x_offest, y_offset
     void set_default_rows(int,int,int); // row_width * row_height * row_num
     void add_row(int,int,int,int,int,int,int,int); // Coordinate, Height, Sitewidth, Sitespacing, Siteorient, Sitesymmetry, SubrowOrigin, NumSites

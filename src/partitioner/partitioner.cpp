@@ -783,7 +783,7 @@ void Partitioner::partition(int gain_2_pin, int gain_3_pin, int gain_mult, bool 
 
     // Partitioner::initial_partition();
     Partitioner::calc_cutsize();
-    // cout << " Cutsize: " << _cutSize << endl;
+    cout << " Cutsize: " << _cutSize << endl;
     
     vector<int> gain;
     int count = 0;
