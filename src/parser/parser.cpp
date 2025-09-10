@@ -98,13 +98,7 @@ bool Parser_C::read_file(string fileName){
                     ss3 >> next_token;
                     if(next_token == "N" || next_token == "Y"){ // ICCAD2023 format
                         ss3 >> libCell.name >> libCell.sizeX >> libCell.sizeY >> libCell.numLibPin;
-                        
-                        if(next_token == "Y"){
-                            libCell.isMacro = 1;
-                        }
-                        else{
-                            libCell.isMacro = 0;
-                        }
+                        libCell.isMacro = 0;
                     }
                     else{ // ICCAD2022 format
                         libCell.name = next_token;

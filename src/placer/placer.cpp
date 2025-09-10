@@ -895,6 +895,7 @@ bool Placer_C::shrunk2d_replace(){
     // cout << BLUE << "[Placer]" << RESET << " - Partition: runtime = " << total_part_time << " sec = " << total_part_time/60.0 << " min.\n";
     cout << BLUE << "[Placer]" << RESET << " - Partition result: " << "Die[0].cell_num = " << _pChip->get_die(0)->get_cells().size() << ", Die[1].cell_num = " << _pChip->get_die(1)->get_cells().size() << ".\n";
     // mincut_k_partition();
+    mincut_partition();
     bin_based_partition_new();
 
     total_part_time = (float)clock() / CLOCKS_PER_SEC - part_time_start;
@@ -2206,6 +2207,7 @@ void Placer_C::mincut_partition(){
     }
     hgr.write_hgr();
     run_hmetis(2, 0.7, "circuit");
+    sleep(10);
     hgr.read_part_result(2);
     //cout << "hmetis partition result: " << max(hgr.get_part_size(0),hgr.get_part_size(1)) << " : " << min(hgr.get_part_size(0),hgr.get_part_size(1)) << "\n";
     for(Cell_C* cell : _vCell){
@@ -2460,7 +2462,7 @@ void Placer_C::bin_based_partition_new() {
 		} else if(_vCell.size() > 20000) { // case 3
 			partitioner->partition(2,2,3, true);
 		} else {
-			partitioner->partition(2,2,3, true);
+			partitioner->partition(1,1,1, true);
 		}
         // partitioner->printSummary();
         vector<vector<int> >& cellPart = partitioner->get_part_result();
@@ -3916,7 +3918,7 @@ bool Placer_C::txt2bookself(){
                     Pos pin_offset1 = cell->get_master_cell()->get_pin_offset(_pChip->get_die(1)->get_techId() ,pin->get_id());
                     //pin_offset1.x -= cell->get_width()/2; pin_offset1.y -= cell->get_height()/2;
                     Pos pin_offset = Pos(ceil((pin_offset0.x+pin_offset1.x)/2.0), ceil((pin_offset0.y+pin_offset1.y)/2.0));
-                    aux2D.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset.x, pin_offset.y);
+                    aux2D.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset.x - cellW/2 , pin_offset.y - cellH/2);
                 }
             }
         }
@@ -3952,7 +3954,7 @@ bool Placer_C::txt2bookself(){
                     }
                     Pos pin_offset0 = cell->get_master_cell()->get_pin_offset(_pChip->get_die(0)->get_techId() ,pin->get_id());
                     // pin_offset0.x -= cell->get_width()/2; pin_offset0.y -= cell->get_height()/2;
-                    auxTier0.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset0.x, pin_offset0.y);
+                    auxTier0.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset0.x - cellW/2, pin_offset0.y - cellH/2);
                 }
             }       
         }
@@ -3986,7 +3988,7 @@ bool Placer_C::txt2bookself(){
                         IO='O';
                     }
                     Pos pin_offset1 = cell->get_master_cell()->get_pin_offset(_pChip->get_die(1)->get_techId() ,pin->get_id());
-                    auxTier1.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset1.x, pin_offset1.y);
+                    auxTier1.add_pin(net->get_name(), pin->get_cell()->get_name(), IO, pin_offset1.x - cellW/2, pin_offset1.y - cellH/2);
                 }
             }       
         }

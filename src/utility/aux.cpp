@@ -63,6 +63,16 @@ void AUX::write_files(){
     write_scl();
     write_wts();
 }
+
+void AUX::write_files(vector<string> orient){
+    write_aux();
+    write_nets();
+    write_nodes();
+    write_pl(orient);
+    write_scl();
+    write_wts();
+}
+
 void AUX::write_aux(){
     string fileName = _dir + _circuit_name + ".aux";
     ofstream fout(fileName);
@@ -142,6 +152,32 @@ void AUX::write_pl(){
     }
     fout.close();
 }
+
+void AUX::write_pl(vector<string> orient){
+    string fileName = _dir + _circuit_name + ".pl";
+    ofstream fout(fileName);
+    time_t ttime = time(0);
+    char* dt = ctime(&ttime);
+    fout << "UCLA pl 1.0" << "\n";
+    fout << "# Created\t:\t" << dt << "\n";
+    fout << "# User\t\t:\t" << getenv("USER") << "\n";
+    fout << "\n";
+    for(AuxNode& node : _vNodes){
+        if(node.name[0] == 'C'){
+            fout << node.name << "\t" << node.x << "\t" << node.y << "\t: " << orient[stoi(node.name.substr(1)) - 1];
+            if(node.type == 1) fout << " /FIXED";
+            if(node.type == 2) fout << " /FIXED_NI";
+            fout << "\n";
+        }else{
+            fout << node.name << "\t" << node.x << "\t" << node.y << "\t: N";
+            if(node.type == 1) fout << " /FIXED";
+            if(node.type == 2) fout << " /FIXED_NI";
+            fout << "\n";
+        }
+    }
+    fout.close();
+}
+
 void AUX::write_scl(){
     string fileName = _dir + _circuit_name + ".scl";
     ofstream fout(fileName);
