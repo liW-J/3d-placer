@@ -92,7 +92,7 @@ void AUX::write_nodes(){
     char* dt = ctime(&ttime);
     fout << "UCLA nodes 1.0" << "\n";
     fout << "# Created\t:\t" << dt << "\n";
-    fout << "# User\t\t:\t" << getenv("USER") << "\n";
+    fout << "# User\t\t:\t" << "placer" << "\n";
     fout << "\n";
     fout << "NumNodes :\t\t" << _vNodes.size() << "\n";
     fout << "NumTerminals :\t" << numTerminals << "\n";
@@ -111,7 +111,7 @@ void AUX::write_nets(){
     char* dt = ctime(&ttime);
     fout << "UCLA nets 1.0" << "\n";
     fout << "# Created\t:\t" << dt << "\n";
-    fout << "# User\t\t:\t" << getenv("USER") << "\n";
+    fout << "# User\t\t:\t" << "placer" << "\n";
     fout << "\n";
     fout << "NumNets :\t" << _mNets.size() << "\n";
     fout << "NumPins :\t" << numPins << "\n";
@@ -131,7 +131,7 @@ void AUX::write_wts(){
     char* dt = ctime(&ttime);
     fout << "UCLA wts 1.0" << "\n";
     fout << "# Created\t:\t" << dt << "\n";
-    fout << "# User\t\t:\t" << getenv("USER") << "\n";
+    fout << "# User\t\t:\t" << "placer" << "\n";
     fout << "\n";
     fout.close();
 }
@@ -142,7 +142,7 @@ void AUX::write_pl(){
     char* dt = ctime(&ttime);
     fout << "UCLA pl 1.0" << "\n";
     fout << "# Created\t:\t" << dt << "\n";
-    fout << "# User\t\t:\t" << getenv("USER") << "\n";
+    fout << "# User\t\t:\t" << "placer" << "\n";
     fout << "\n";
     for(AuxNode& node : _vNodes){
         fout << node.name << "\t" << node.x << "\t" << node.y << "\t: N";
@@ -160,7 +160,7 @@ void AUX::write_pl(vector<string> orient){
     char* dt = ctime(&ttime);
     fout << "UCLA pl 1.0" << "\n";
     fout << "# Created\t:\t" << dt << "\n";
-    fout << "# User\t\t:\t" << getenv("USER") << "\n";
+    fout << "# User\t\t:\t" << "placer" << "\n";
     fout << "\n";
     for(AuxNode& node : _vNodes){
         if(node.name[0] == 'C'){
@@ -185,7 +185,7 @@ void AUX::write_scl(){
     char* dt = ctime(&ttime);
     fout << "UCLA scl 1.0" << "\n";
     fout << "# Created\t:\t" << dt << "\n";
-    fout << "# User\t\t:\t" << getenv("USER") << "\n";
+    fout << "# User\t\t:\t" << "placer" << "\n";
     fout << "\n";
     fout << "NumRows : " << _vRows.size() << "\n\n";
     for(AuxRow& row : _vRows){
